@@ -6,6 +6,14 @@
  This creates a DataRead object, which contains all the data in a correctly formatted file. The file can be of any type, but must contain the data in the format:
  arg , arg , arg , ... , arg , class/n
  Whitespace between arguments is optional.
+ 
+ Usage: Create a new dataread object, passing as an argument the name of the file to be read.
+ 
+ Contains the following data:
+ DataRead.linecount -> Number of lines of data
+ DataRead.argcount -> Number of arguments (does not include the class)
+ DataRead.storage[i][j] -> Stores the arguments. i = line, j = argument in that line
+ DataRead.classes[i] -> Classes for each line i.
 */
 
 
