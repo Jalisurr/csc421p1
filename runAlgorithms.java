@@ -1,7 +1,7 @@
 
 public class runAlgorithms {
 
-  /**
+	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -42,7 +42,7 @@ public class runAlgorithms {
 	//Create and run a  new BoostingAlgorithm for the passed data set 
 	//with a randomly selected training set 1/4 the size of the full data set
 	public static int runBoosting(DataRead data) throws Exception {
-		BoostingAlgorithm boosting = new BoostingAlgorithm(data, data.linecount/4);
+		BoostingAlgorithm boosting = new BoostingAlgorithm(data, data.linecount/4, 4);
 		if (boosting == null) {
 			//Error
 			System.err.println("Error: BoostingAlgorithm object not initialized");
