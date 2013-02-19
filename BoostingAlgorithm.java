@@ -19,7 +19,7 @@ import java.lang.Math;
 import java.lang.Exception;
 
 public class BoostingAlgorithm {
-  DataRead data;
+	DataRead data;
 	//number of unique classes
 	int classes;
 	//number of features
@@ -43,8 +43,9 @@ public class BoostingAlgorithm {
 	
 	
 	//initializes a BoostingAlgorithm object with a preset training set
-	public BoostingAlgorithm(DataRead input, int[] training_set) throws BoostingAlgorithmException {
+	public BoostingAlgorithm(DataRead input, int[] training_set, int num_iterations) throws BoostingAlgorithmException {
 		data = input;
+		iterations = num_iterations;
 		training_indices = training_set;
 		for (int i = 0; i < training_set.length; i++) {
 			if (i > 0) {
@@ -60,10 +61,10 @@ public class BoostingAlgorithm {
 	}
 	
 	//initializes a BoostingAlgorithm object with a randomized training set of training_size 
-	public BoostingAlgorithm(DataRead input, int training_size) throws BoostingAlgorithmException {
+	public BoostingAlgorithm(DataRead input, int training_size, int num_iterations) throws BoostingAlgorithmException {
 		
 		data = input;
-		
+		iterations = num_iterations;
 		Random r = new Random(training_size);
 		int lowerbound;
 		int upperbound;
@@ -88,8 +89,7 @@ public class BoostingAlgorithm {
 	
 	//initialize classification
 	private void init() {
-		//classes = data.classcount;
-		//iterations = ?;
+		classes = data.classlist.length;
 		features = data.argcount;
 		setsize = training_indices.length;
 		
