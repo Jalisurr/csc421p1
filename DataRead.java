@@ -65,10 +65,6 @@ public class DataRead {
 		System.out.println("Populating Class List");
 		classlist = PopulateClasses(classes, linecount);
 		System.out.println("Complete");
-		System.out.println("Class List:");
-		for (int i = 0; i < numunique; i++){
-			System.out.println(classlist[i]);
-		}
 	}
 	
 	public String[] PopulateClasses(String[] classes, int linecount){
