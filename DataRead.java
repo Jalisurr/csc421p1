@@ -73,7 +73,7 @@ public class DataRead {
 		String[] classlist = new String[linecount];
 		for (int i = 0; i < linecount; i++){
 			for (int j = 0; j < numunique; j++) {
-				if (classes[i].equals(classlist[j]) == true) {
+				if (classes[i] == null || classes[i].equals(classlist[j])) {
 					newclass = false;
 				}
 			}
