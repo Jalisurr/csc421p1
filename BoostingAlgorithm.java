@@ -47,6 +47,7 @@ public class BoostingAlgorithm {
 		data = input;
 		iterations = num_iterations;
 		training_indices = training_set;
+		
 		for (int i = 0; i < training_set.length; i++) {
 			if (i > 0) {
 				if (training_set[i]<=training_set[i-1]) {
@@ -68,28 +69,35 @@ public class BoostingAlgorithm {
 		Random r = new Random(training_size);
 		int lowerbound;
 		int upperbound;
-		
 		//verify training_size < data.linecount
 		if (!(training_size < data.linecount)) {
 			throw new BoostingAlgorithmException("Error: Training Data set must be smaller than main data set");
 		}
 		
 		training_indices = new int[training_size];
-		//select a random index between lowerbound and upperbound
+		//Generate a training set chosen randomly from evenly spaced intervals of the source data 
+		int interval = data.linecount/training_size;
 		for (int i=0;i<training_indices.length;i++) {
-			//the previous training index
-			lowerbound = training_indices[i-1];
-			//the last training index that still allows for training_indices.length-i more indices
-			upperbound = training_indices[data.linecount-(training_indices.length-i)];
-			
-			training_indices[i] = lowerbound+r.nextInt(upperbound-lowerbound);
+			training_indices[i] = i*interval+r.nextInt(interval);
+		}
+		for (int i = 0; i < training_indices.length; i++) {
+			if (i > 0) {
+				if (training_indices[i]<=training_indices[i-1]) {
+					throw new BoostingAlgorithmException("Indicies of Training Data set must be in ascending order");
+				}
+			}
+			if (training_indices[i] >= data.linecount || training_indices[i] < 0) {
+				throw new BoostingAlgorithmException("Training Data set must be a subset of the main data set");
+			}
 		}
 		this.init();
 	}
 	
 	//initialize classification
 	private void init() {
-		classes = data.classlist.length;
+		//System.out.println("Initializing Boosting Algorithm");
+		
+		classes = data.numunique;
 		features = data.argcount;
 		setsize = training_indices.length;
 		
@@ -102,6 +110,7 @@ public class BoostingAlgorithm {
 
 		// |classes|*|features|*|iterations|*|setsize| data point weights
 		training_weights = new double[classes][features][iterations][setsize];
+		
 	}
 	
 	
@@ -116,7 +125,7 @@ public class BoostingAlgorithm {
 		//These will be combined upon completion of the algorithm
 		for (c = 0; c < classes; c++) {
 			for (f = 0; f < features; f++) {
-				
+					
 				//define a sorted list of intervals for this feature
 				intervals = new double[setsize+1];
 				max = data.storage[training_indices[0]][f];
@@ -126,16 +135,17 @@ public class BoostingAlgorithm {
 						max = intervals[s];
 					}
 				}
+				
 				intervals[intervals.length-1] = max+1;
 				intervals = sort_intervals(intervals);
 				
 				for (i = 0; i < iterations; i++) {
 					
 		/*Set the weights of the data points based on the previous iteration**********************************/
-					
+		//System.out.println("Set weigths");			
 					weight_sum = 0;
 					for (s = 0; s < setsize; s++) {
-						if (i==0) {
+						if (i<=0) {
 						//initialize the training weights for the first iteration to 1
 							training_weights[c][f][i][s] = 1;
 						} else {
@@ -144,8 +154,10 @@ public class BoostingAlgorithm {
 							//
 							if (classifiers[c][f][i-1].classify(data.storage[training_indices[s]][f])==(data.classes[training_indices[s]] == data.classlist[c])) {
 								training_weights[c][f][i][s] = training_weights[c][f][i-1][s]*Math.exp(-classifier_weights[c][f][i-1]);
+								//System.out.println("t: "+training_weights[c][f][i][s]+" = "+training_weights[c][f][i-1][s]+"*exp("+(-classifier_weights[c][f][i-1])+")");
 							} else {
 								training_weights[c][f][i][s] = training_weights[c][f][i-1][s]*Math.exp(classifier_weights[c][f][i-1]);
+								//System.out.println("t: "+training_weights[c][f][i][s]+" = "+training_weights[c][f][i-1][s]+"*exp("+(classifier_weights[c][f][i-1])+")");
 							}
 						}
 						weight_sum += training_weights[c][f][i][s];
@@ -156,6 +168,7 @@ public class BoostingAlgorithm {
 					}
 					
 		/*Define the classifiers using decision stumps********************************************************/
+		//System.out.println("Define classifiers");	
 					//for each interval, compute sum of weights
 					//weights_true[j] = sum training_weights[c][f][i][s] such that data.storage[training_indices[s]][f]>=intervals[j]
 					weights_true = new double[intervals.length-1];
@@ -164,29 +177,44 @@ public class BoostingAlgorithm {
 						weights_true[j] = 0;
 						weights_false[j] = 0;
 						for (s = 0;s < setsize; s++) {
-							if (data.storage[training_indices[s]][f]>=intervals[j]&& data.storage[training_indices[s]][f] < intervals[j+1]) {
-								weights_true[j] += training_weights[c][f][i][s];
-							} else {
-								weights_false[j] += training_weights[c][f][i][s];
+							//If the data point is in the interval
+							if (data.storage[training_indices[s]][f]>=intervals[j] && data.storage[training_indices[s]][f] < intervals[j+1]) {
+								//if the class matches
+								if (data.classes[training_indices[s]].equals(data.classlist[c])) {
+									weights_true[j] += training_weights[c][f][i][s];
+								} else {
+									weights_false[j] += training_weights[c][f][i][s];
+								}
 							}
 						}
 					}
 					//then the classifier for the interval = true if weights_true[j]>weights_false[j] and false otherwise
 					classifiers[c][f][i] = new DecisionStump(intervals);
+					//System.out.print("[");
 					for (j = 0; j < intervals.length-1; j++) {
-						classifiers[c][f][i].value[j] = weights_true[j]>weights_false[j];
+						classifiers[c][f][i].value[j] = weights_true[j]>=weights_false[j];
+						//System.out.print(classifiers[c][f][i].value[j]+"("+weights_true[j]+":"+weights_false[j]+"), ");
 					}
+					//System.out.println("]");
 		/*Compute the weighted error**************************************************************************/
+		//System.out.println("Compute Error");
 					classifier_error[c][f][i] = 0;
 					for (s = 0; s < setsize; s++) {
 						//if hypothesis != classification
-						if (classifiers[c][f][i].classify(data.storage[training_indices[s]][f]) != (data.classes[training_indices[s]] == data.classlist[c])) {
+						//System.out.println("e: "+classifiers[c][f][i].classify(data.storage[training_indices[s]][f])+" ?!= ("+data.classes[training_indices[s]]+"?="+data.classlist[c]+")");
+						if (classifiers[c][f][i].classify(data.storage[training_indices[s]][f]) != (data.classes[training_indices[s]].equals(data.classlist[c]))) {
 							classifier_error[c][f][i] += training_weights[c][f][i][s];
 						}
 					}
-		/*Compute the classifier weights**********************************************************************/			
-					classifier_weights[c][f][i] = (0.5)*Math.log((1-classifier_error[c][f][i])/classifier_error[c][f][i]);
-					
+		/*Compute the classifier weights**********************************************************************/
+		//System.out.println("Compute classifier weights");	
+					if (classifier_error[c][f][i] > 0) {
+						classifier_weights[c][f][i] = (0.5)*Math.log((1-classifier_error[c][f][i])/classifier_error[c][f][i]);
+					} else {
+						//If there is no error, choose a neutral weight
+						classifier_weights[c][f][i] = 1;
+					}
+					//System.out.println("c: "+classifier_weights[c][f][i]+" = 0.5*ln("+(1-classifier_error[c][f][i])+"/"+classifier_error[c][f][i]+")");
 				}
 			}
 		}
@@ -214,19 +242,22 @@ public class BoostingAlgorithm {
 		while (min != max) {
 			for (i=0; i < unsorted_intervals.length; i++) {
 				//remove all values equal to min by setting them to max
-				if (unsorted_intervals[i]==min) {
+				if (unsorted_intervals[i] <= min) {
 					unsorted_intervals[i]=max;
 				}
 			}
 			//find the new min
+			min = max;
 			for (i=0; i < unsorted_intervals.length; i++) {
 				if (min>unsorted_intervals[i]) {
 					min=unsorted_intervals[i];
 				}
 			}
+			
 			sorted_intervals[length] = min;
 			length = length + 1;
 		}
+			
 		//create a new set of intervals with duplicates removed
 		intervals = new double[length];
 		for (i=0; i < intervals.length; i++) {
@@ -242,26 +273,51 @@ public class BoostingAlgorithm {
 		boolean[] class_list = new boolean[classes];
 		int c, f, i;
 		
-		
+		//System.out.println("Classifying:");
 		for (c = 0; c < classes; c++) {
 			hypothesis = 0;
+			//System.out.println("   "+data.classlist[c]+":");
 			for (f = 0; f < features; f++) {
+				//System.out.print("      "+data.storage[datapoint][f]+": [");
 				for (i = 0; i < iterations; i++) {
 					if (classifiers[c][f][i].classify(data.storage[datapoint][f])) {
+				//System.out.print("true, ");
 						hypothesis += classifier_weights[c][f][i];
 					} else {
+				//System.out.print("false, ");
 						hypothesis -= classifier_weights[c][f][i];
 					}
 				}
+				//System.out.println("]");
 			}
 			class_list[c] = hypothesis > 0;
 		}
 		return class_list;
 	}
 	
+	public void print_classifier() {
+		int c, f, i, j;
+		
+		for (c = 0; c < classes; c++) {
+			
+			System.out.println(data.classlist[c]+":");
+			for (f = 0; f < features; f++) {
+				System.out.print("   "+f+"{");
+				for (i = 0; i < iterations; i++) {
+					System.out.print(i+"[");
+					for (j = 0; j < classifiers[c][f][i].value.length; j++) {
+						System.out.print(classifiers[c][f][i].interval[j]+"-"+classifiers[c][f][i].interval[j+1]+":"+classifiers[c][f][i].value[j]+", ");
+					}
+					System.out.print("] ");
+				}
+				System.out.println("}");
+			}
+		}
+		
+	}
+	
 	//compares the boolean class_list returned from classify() with the actual class of the datapoint
 	//returns:
-	//	-1 for error
 	//	0 for correct classification
 	//	1 for correct classification but also some incorrect classifications
 	//	2 for incorrect classifications
@@ -278,7 +334,6 @@ public class BoostingAlgorithm {
 		}
 		if (class_index == -1) {
 			throw new BoostingAlgorithmException("Class \"" + data.classes[datapoint] + "\" not found in class list");
-			return -1;
 		}
 		//Check if the correct class is indicated
 		if (class_list[class_index]) {
@@ -325,14 +380,15 @@ public class BoostingAlgorithm {
 		int result;
 		int[] statistics = {0, 0, 0, 0};
 		int s = 0;
-		
-		for (int i = 0; i < data.linecount; i++) {
+		//System.out.println(data.classes[150]);
+		for (int i = 0; i < data.linecount-1; i++) {
 			//only test against data not in the training set
-			if (i == training_indices[s]) {
+			if (s<training_indices.length && i == training_indices[s]) {
 				s++;
 			} else {
 				class_list = this.classify(i);
 				result = this.compare(class_list, i);
+				//System.out.println(s+", "+i+": "+result);
 				statistics[result] += 1;
 			}
 		}
