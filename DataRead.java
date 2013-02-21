@@ -23,8 +23,10 @@ public class DataRead {
 	static int MAXSIZE = 4000;
 	int linecount;
 	int argcount;
+	int numunique;
 	double[][] storage;
 	String[] classes;
+	String[] classlist;
 	
 	public DataRead(){			//Just incase you call it wrong
 		linecount = 0;
@@ -60,6 +62,32 @@ public class DataRead {
 			System.err.println("Error: " + e.getMessage());
 		}
 		System.out.println("Buffering Complete");
+		System.out.println("Populating Class List");
+		classlist = PopulateClasses(classes, linecount);
+		System.out.println("Complete");
+		System.out.println("Class List:");
+		for (int i = 0; i < numunique; i++){
+			System.out.println(classlist[i]);
+		}
+	}
+	
+	public String[] PopulateClasses(String[] classes, int linecount){
+		numunique = 0;
+		boolean newclass = true;
+		String[] classlist = new String[linecount];
+		for (int i = 0; i < linecount; i++){
+			for (int j = 0; j < numunique; j++) {
+				if (classes[i].equals(classlist[j]) == true) {
+					newclass = false;
+				}
+			}
+			if (newclass == true) {
+				classlist[numunique] = classes[i];
+				numunique++;
+			}
+			newclass = true;
+		}
+		return classlist;
 	}
 	
 	public int CountLines(BufferedReader br){		//Counts how many lines of data there are in the file
