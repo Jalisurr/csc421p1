@@ -3,9 +3,7 @@
 //David Williams - V00701616
 
 /*
- This creates a DataRead object, which contains all the data in a correctly formatted file. The file can be of any type, but must contain the data in the format:
- arg , arg , arg , ... , arg , class/n
- Whitespace between arguments is optional.
+ This creates a DataRead object, which contains all the data in a correctly formatted file. The file can be of any type, but must not have a header
  
  Usage: Create a new dataread object, passing as an argument the name of the file to be read.
  
@@ -14,6 +12,8 @@
  DataRead.argcount -> Number of arguments (does not include the class)
  DataRead.storage[i][j] -> Stores the arguments. i = line, j = argument in that line
  DataRead.classes[i] -> Classes for each line i.
+ DataRead.classlist[i] -> The list of unique classes.
+ DataRead.numunique -> Number of unique classes contained in classlist
 */
 
 
@@ -66,6 +66,49 @@ public class DataRead {
 		classlist = PopulateClasses(classes, linecount);
 		System.out.println("Complete");
 	}
+	
+	public DataRead(String arg, boolean classfront){
+		int count = 0;					//A few temporary variables
+		String strLine;
+		String[] strSplit;
+		System.out.println("Opening File");
+		BufferedReader br = OpenFile(arg);			//Get the reader for reading the data. Same reader is used to find argcount.
+		BufferedReader counter = OpenFile(arg);		//Temporary reader just to determine the filesize
+		argcount = CountLength(br) - 1;
+		linecount = CountLines(counter);
+		System.out.println("Preparing Buffer");
+		storage = new double[linecount][argcount];	//Make storage big enough for the file
+		classes = new String[linecount];
+		System.out.println("Buffering");
+		try {
+			if (classfront == false){
+				while ((strLine = br.readLine()) != null){
+					strSplit = strLine.split("\\s*,\\s*");	//Split on commas surrounded with whitespace
+					for (int i = 0; i < argcount; i++){
+						storage[count][i] = Double.parseDouble(strSplit[i]);
+					}
+					classes[count] = strSplit[argcount];
+					count++;
+				}
+			}
+			else {
+				while ((strLine = br.readLine()) != null){
+					strSplit = strLine.split("\\s*,\\s*");	//Split on commas surrounded with whitespace
+					classes[count] = strSplit[0];
+					for (int i = 0; i < argcount; i++){
+						storage[count][i] = Double.parseDouble(strSplit[i+1]);
+					}
+					count++;
+				}
+			}
+		}
+		catch (Exception e){
+			System.err.println("Error: " + e.getMessage());
+		}
+		System.out.println("Buffering Complete");
+		System.out.println("Populating Class List");
+		classlist = PopulateClasses(classes, linecount);
+		System.out.println("Complete");	}
 	
 	public String[] PopulateClasses(String[] classes, int linecount){
 		numunique = 0;
