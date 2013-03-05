@@ -2,10 +2,10 @@
  * University of Victoria
  * 
  * DecisionStump.java
- * Last modified: March 2, 2013
+ * Last modified: February 21, 2013
  * Author:Torben Barsballe - V00696445
  * 
- * Runs DataRead and Boosting (both with Decision Stumps and Perceptron) algorithms on the Iris, Diabeters, Heart and Cancer data sets
+ * Runs DataRead and Classification algorithms on the Iris and Poker data sets
  */
 public class runAlgorithms {
 
@@ -14,7 +14,7 @@ public class runAlgorithms {
 	 */
 	public static void main(String[] args) {
 		DataRead data;
-		int i = 3; 		//Number of iterations
+		int i = 4; 		//Number of iterations
 		int size = 4;	//Size of the training set = |Data|/size
 		
 		//Create a new BoostingAlgorithm for the iris_data set 
@@ -22,9 +22,9 @@ public class runAlgorithms {
 		
 			
 		//IRIS */
-		
+		//http://archive.ics.uci.edu/ml/datasets/Iris
 		try {
-			data = new DataRead("./src/Data Sets/Iris/Iris.data");
+			data = new DataRead("./src/Iris.data");
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -44,9 +44,10 @@ public class runAlgorithms {
 		
 			
 		//DIABETES */
+		//http://archive.ics.uci.edu/ml/datasets/Pima+Indians+Diabetes
 		
 		try {	
-			data = new DataRead("./src/Data Sets/pima-indians-diabetes.data");
+			data = new DataRead("./src/pima-indians-diabetes.data");
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -63,9 +64,9 @@ public class runAlgorithms {
 		
 		
 		//HEART */
-		
+		//http://archive.ics.uci.edu/ml/datasets/SPECTF+Heart
 		try {
-			data = new DataRead("./src/Data Sets/SPECTF.train", true);
+			data = new DataRead("./src/SPECTF.train", true);
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -82,9 +83,9 @@ public class runAlgorithms {
 		
 		
 		//CANCER SURVIVAL */
-		
+		//http://archive.ics.uci.edu/ml/datasets/Haberman%27s+Survival
 		try {	
-			data = new DataRead("./src/Data Sets/haberman.data");
+			data = new DataRead("./src/haberman.data");
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -99,28 +100,11 @@ public class runAlgorithms {
 			System.err.println("Error: "+ e.getMessage());
 		}
 		
-		//SKIN */
-		/*
-		try {
-			data = new DataRead("./src/Data Sets/Skin_NonSkin.txt");
-			if (data == null) {
-				//Error
-				System.err.println("Error: DataRead object not initialized");
-				System.exit(0);
-			}
-			System.out.println("Running Boosting with Decision Stumps Algorithm on Skin Data set...");
-			runBoosting(data, 4, i);
-			System.out.println("Running Boosting with Perceptron Algorithm on Skin Data set...");
-			runBoosting_p(data, 4, i);
-			data = null;
-		} catch(Exception e) {
-			System.err.println("Error: "+ e.getMessage());
-		}
-		
 		//POKER */
+		//http://archive.ics.uci.edu/ml/datasets/Poker+Hand
 		/*
 		try {
-			data = new DataRead("./src/Data Sets/Poker/poker-hand-training-true.data");
+			data = new DataRead("./src/poker-hand-training-true.data");
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -137,9 +121,10 @@ public class runAlgorithms {
 		}
 		
 		//LEAVES */
+		//http://archive.ics.uci.edu/ml/datasets/One-hundred+plant+species+leaves+data+set#
 		/*	
 		try {	
-			data = new DataRead("./src/Data Sets/Leaves/100 leaves plant species/data_Sha_64.txt", true);
+			data = new DataRead("./src/100 leaves plant species/data_Sha_64.txt", true);
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
