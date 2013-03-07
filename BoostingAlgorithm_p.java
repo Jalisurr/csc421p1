@@ -3,7 +3,9 @@
  * 
  * BoostingAlgorithm_p.java
  * Last modified: March 2, 2013
- * Author:Torben Barsballe - V00696445
+ * Authors: Torben Barsballe - V00696445
+ * 	    Joanna Stratton - V00702087
+ *	    David Williams - V00701616
  * 
  * Implements a Boosting algorithm with perceptron
  * 
