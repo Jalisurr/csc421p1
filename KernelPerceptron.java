@@ -310,7 +310,6 @@ public class KernelPerceptron
 	}
 
 
-
 	/*************************************************************************
 	* Method Name: dotProduct()
 	* Purpose: helper function to calculate the dot (inner) product between two vectors
