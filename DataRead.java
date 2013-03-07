@@ -1,6 +1,8 @@
 //Computer Science 421 - Artificial Intelligence
 //University of Victoria
-//David Williams - V00701616
+// Authors: David Williams - V00701616
+//	    Torben Barsballe - V00696445
+// 	    Joanna Stratton - V00702087	    
 
 /*
  This creates a DataRead object, which contains all the data in a correctly formatted file. The file can be of any type, but must not have a header
