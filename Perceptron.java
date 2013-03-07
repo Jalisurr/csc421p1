@@ -21,7 +21,7 @@ public class Perceptron {
 	
 	//tests the array of data against weights. if > 0 returns true. 
 	//if <= 0 adds data to weights and returns false
-	public boolean update(double[] data, double weight, boolean classifier) {
+	public boolean update(double[] data, boolean classifier) {
 		double sum = 0;
 		
 		//create a new data vector to encompass all data points plus classifier
