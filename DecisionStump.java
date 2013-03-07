@@ -29,7 +29,7 @@ public class DecisionStump {
 	 * If point < value, returns result_lt
 	 */
 	public boolean classify(double point) {
-		for (int i =0; i < interval.length; i++) {
+		for (int i =0; i < interval.length-1; i++) {
 			if (point >= interval[i] && point < interval[i+1]) {
 				return value[i];
 			} 
