@@ -165,7 +165,7 @@ public class BoostingAlgorithm_p {
 					for (s = 0; s < setsize/2; s++) {
 						//Select a subset of training data based on weighted distribution
 						rand_s = getRandomData(r.nextDouble(),training_weights[c][i]);
-						result = classifiers[c][i].update(data.storage[training_indices[rand_s]], training_weights[c][i][rand_s], data.classes[training_indices[rand_s]].equals(data.classlist[c]));
+						result = classifiers[c][i].update(data.storage[training_indices[rand_s]], data.classes[training_indices[rand_s]].equals(data.classlist[c]));
 						if (!result) {
 							break;
 						}
