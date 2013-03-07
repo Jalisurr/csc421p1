@@ -3,7 +3,9 @@
  * 
  * DecisionStump.java
  * Last modified: February 21, 2013
- * Author:Torben Barsballe - V00696445
+ * Authors: Torben Barsballe - V00696445
+ * 	    Joanna Stratton - V00702087
+ * 	    David Williams - V00701616 
  * 
  * Runs DataRead and Classification algorithms on the Iris and Poker data sets
  */
