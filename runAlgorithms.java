@@ -16,7 +16,7 @@ public class runAlgorithms {
 	 */
 	public static void main(String[] args) {
 		DataRead data;
-		int i = 4; 		//Number of iterations
+		int iterations = 4; 		//Number of iterations
 		int size = 4;	//Size of the training set = |Data|/size
 		
 		//Create a new BoostingAlgorithm for the iris_data set 
@@ -33,9 +33,9 @@ public class runAlgorithms {
 				System.exit(0);
 			}
 			System.out.println("Running Boosting with Decision Stumps Algorithm on Iris Data set...");
-			runBoosting(data, 4, i);
+			runBoosting(data, 4, iterations);
 			System.out.println("Running Boosting with Perceptron Algorithm on Iris Data set...");
-			runBoosting_p(data, 4, i);
+			runBoosting_p(data, 4, iterations);
 			data = null;
 			
 			
@@ -56,9 +56,9 @@ public class runAlgorithms {
 				System.exit(0);
 			}
 			System.out.println("Running Boosting with Decision Stumps Algorithm on Diabetes Data set...");
-			runBoosting(data, 4, i);
+			runBoosting(data, 4, iterations);
 			System.out.println("Running Boosting with Perceptron Algorithm on Diabetes Data set...");
-			runBoosting_p(data, 4, i);
+			runBoosting_p(data, 4, iterations);
 			data = null;
 		} catch(Exception e) {
 			System.err.println("Error: "+ e.getMessage());
@@ -75,9 +75,9 @@ public class runAlgorithms {
 				System.exit(0);
 			}
 			System.out.println("Running Boosting with Decision Stumps Algorithm on Heart Data set...");
-			runBoosting(data, 4, i);
+			runBoosting(data, 4, iterations);
 			System.out.println("Running Boosting with Perceptron Algorithm on Heart Data set...");
-			runBoosting_p(data, 4, i);
+			runBoosting_p(data, 4, iterations);
 			data = null;
 		} catch(Exception e) {
 			System.err.println("Error: "+ e.getMessage());
@@ -94,9 +94,9 @@ public class runAlgorithms {
 				System.exit(0);
 			}
 			System.out.println("Running Boosting with Decision Stumps Algorithm on Cancer Survival Data set...");
-			runBoosting(data, 4, i);
+			runBoosting(data, 4, iterations);
 			System.out.println("Running Boosting with Perceptron Algorithm on Cancer Survival Data set...");
-			runBoosting_p(data, 4, i);
+			runBoosting_p(data, 4, iterations);
 			data = null;
 		} catch(Exception e) {
 			System.err.println("Error: "+ e.getMessage());
@@ -113,9 +113,9 @@ public class runAlgorithms {
 				System.exit(0);
 			}
 			System.out.println("Running Boosting with Decision Stumps Algorithm on Poker Data set...");
-			runBoosting(data, 4, i);
+			runBoosting(data, 4, iterations);
 			System.out.println("Running Boosting with Perceptron Algorithm on Poker Data set...");
-			runBoosting_p(data, 4, i);
+			runBoosting_p(data, 4, iterations);
 			data = null;
 			
 		} catch(Exception e) {
@@ -133,9 +133,9 @@ public class runAlgorithms {
 				System.exit(0);
 			}
 			System.out.println("Running Boosting with Decision Stumps Algorithm on Leaves Data set...");
-			runBoosting(data, 4, i);
+			runBoosting(data, 4, iterations);
 			System.out.println("Running Boosting with Perceptron Algorithm on Leaves Data set...");
-			runBoosting_p(data, 4, i);
+			runBoosting_p(data, 4, iterations);
 			data = null;
 		} catch(Exception e) {
 			System.err.println("Error: "+ e.getMessage());
@@ -153,7 +153,7 @@ public class runAlgorithms {
 		// TEST CASE #1: The Pima Indian Diabetes Data Set
 		KernelPerceptron kp1 = new KernelPerceptron("pima-indians-diabetes.data", 3, 0.25);
 		kp1.convertClassifiers();									// Convert the classifiers to -1 and +1.
-		for (i = 0; i < kp1.data.storage.length; i++)	// Normalize the data.
+		for (int i = 0; i < kp1.data.storage.length; i++)	// Normalize the data.
 		{
 			kp1.data.storage[i] = kp1.normalizeVector(kp1.data.storage[i]);
 		}
@@ -171,7 +171,7 @@ public class runAlgorithms {
 		// TEST CASE #2: The Haberman Cancer Survival Rate
 		KernelPerceptron kp2 = new KernelPerceptron("haberman.data", 3, 0.10);
 		kp2.convertClassifiers();									// Convert the classifiers to -1 and +1.
-		for (i = 0; i < kp2.data.storage.length; i++)	// Normalize the data.
+		for (int i = 0; i < kp2.data.storage.length; i++)	// Normalize the data.
 		{
 			kp2.data.storage[i] = kp2.normalizeVector(kp2.data.storage[i]);
 		}
