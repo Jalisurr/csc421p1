@@ -14,13 +14,13 @@ public class KernelPerceptron
 {
 
 	// Data members.
-	DataRead data;				// Variable to store the data.
-	int d;						// The degree in the kernel equation.
-	int trainingSetSize;		// The size of the training set.
-	int testSetSize;			// The size of the test set.
-	double[] c;					// The implicit classifier.
+	DataRead data;		// Variable to store the data.
+	int d;			// The degree in the kernel equation.
+	int trainingSetSize;	// The size of the training set.
+	int testSetSize;	// The size of the test set.
+	double[] c;		// The implicit classifier.
 	int[] trainingIndices;	// Holds the indices of the training set.
-	int[] testIndices;		// Hold the indices of the test set.		
+	int[] testIndices;	// Hold the indices of the test set.		
 	
 	
 	/*************************************************************************
