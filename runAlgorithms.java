@@ -26,7 +26,7 @@ public class runAlgorithms {
 		//IRIS */
 		//http://archive.ics.uci.edu/ml/datasets/Iris
 		try {
-			data = new DataRead("./src/Iris.data");
+			data = new DataRead("./Iris.data");
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -49,7 +49,7 @@ public class runAlgorithms {
 		//http://archive.ics.uci.edu/ml/datasets/Pima+Indians+Diabetes
 		
 		try {	
-			data = new DataRead("./src/pima-indians-diabetes.data");
+			data = new DataRead("./pima-indians-diabetes.data");
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -68,7 +68,7 @@ public class runAlgorithms {
 		//HEART */
 		//http://archive.ics.uci.edu/ml/datasets/SPECTF+Heart
 		try {
-			data = new DataRead("./src/SPECTF.train", true);
+			data = new DataRead("./SPECTF.train", true);
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -87,7 +87,7 @@ public class runAlgorithms {
 		//CANCER SURVIVAL */
 		//http://archive.ics.uci.edu/ml/datasets/Haberman%27s+Survival
 		try {	
-			data = new DataRead("./src/haberman.data");
+			data = new DataRead("./haberman.data");
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -106,7 +106,7 @@ public class runAlgorithms {
 		//http://archive.ics.uci.edu/ml/datasets/Poker+Hand
 		/*
 		try {
-			data = new DataRead("./src/poker-hand-training-true.data");
+			data = new DataRead("./poker-hand-training-true.data");
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -126,7 +126,7 @@ public class runAlgorithms {
 		//http://archive.ics.uci.edu/ml/datasets/One-hundred+plant+species+leaves+data+set#
 		/*	
 		try {	
-			data = new DataRead("./src/100 leaves plant species/data_Sha_64.txt", true);
+			data = new DataRead("./data_Sha_64.txt", true);
 			if (data == null) {
 				//Error
 				System.err.println("Error: DataRead object not initialized");
@@ -153,7 +153,7 @@ public class runAlgorithms {
 		// TEST CASE #1: The Pima Indian Diabetes Data Set
 		KernelPerceptron kp1 = new KernelPerceptron("pima-indians-diabetes.data", 3, 0.25);
 		kp1.convertClassifiers();									// Convert the classifiers to -1 and +1.
-		for (int i = 0; i < kp1.data.storage.length; i++)	// Normalize the data.
+		for (i = 0; i < kp1.data.storage.length; i++)	// Normalize the data.
 		{
 			kp1.data.storage[i] = kp1.normalizeVector(kp1.data.storage[i]);
 		}
@@ -171,7 +171,7 @@ public class runAlgorithms {
 		// TEST CASE #2: The Haberman Cancer Survival Rate
 		KernelPerceptron kp2 = new KernelPerceptron("haberman.data", 3, 0.10);
 		kp2.convertClassifiers();									// Convert the classifiers to -1 and +1.
-		for (int i = 0; i < kp2.data.storage.length; i++)	// Normalize the data.
+		for (i = 0; i < kp2.data.storage.length; i++)	// Normalize the data.
 		{
 			kp2.data.storage[i] = kp2.normalizeVector(kp2.data.storage[i]);
 		}
